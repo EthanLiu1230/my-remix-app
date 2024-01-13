@@ -22,7 +22,7 @@ import { getContacts } from "~/data";
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: appStylesHref }];
 
 /**
- * load data
+ * load data, on server
  */
 export const loader = async () => {
   const contacts = await getContacts();
