@@ -1,12 +1,14 @@
 import { Form, useLoaderData } from "@remix-run/react";
 import type { FunctionComponent } from "react";
 
-import { ContactRecord, getContact } from "../data";
+import { ContactRecord, getContact } from "~/data";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  // Invariant is a handy function for throwing an error with a custom message when you anticipated a potential issue with your code.
+  /**
+   * Invariant is a handy function for throwing an error with a custom message when you anticipated a potential issue with your code.
+   */
   invariant(params.contactId, "Missing contactId param");
   const contact = await getContact(params.contactId);
   if (!contact) throw new Response("Not found", { status: 404 });
@@ -48,7 +50,7 @@ export default function Contact() {
           </p>
         ) : null}
 
-        {contact.notes ? <p>{contact.notes}</p> : null}
+        {!contact.notes ? null : <p>{contact.notes}</p>}
 
         <div>
           <Form action="edit">
