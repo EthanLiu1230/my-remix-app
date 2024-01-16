@@ -14,7 +14,7 @@ import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 import appStylesHref from "./app.css";
-import { getContacts } from "~/data";
+import { createEmptyContact, getContacts } from "~/data";
 
 /**
  * Every route can export a links function. They will be collected and rendered into the <Links /> component we rendered in app/root.tsx.
@@ -22,11 +22,21 @@ import { getContacts } from "~/data";
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: appStylesHref }];
 
 /**
- * load data, on server
+ * Loader runs on server side
  */
 export const loader = async () => {
   const contacts = await getContacts();
   return json({ contacts });
+};
+
+/**
+ * Action accept handles form's `POST` request.
+ *
+ * Remix also use action's triggering as a hint to auto revalidate.
+ */
+export const action = async () => {
+  const contact = await createEmptyContact();
+  return json({ contact });
 };
 
 export default function App() {
@@ -65,7 +75,7 @@ export default function App() {
                     </>
                   ) : (
                     <i>No Name</i>
-                  )}{" "}
+                  )}
                   {contact.favorite ? (
                     <span>★</span>
                   ) : null}
