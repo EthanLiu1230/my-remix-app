@@ -1,17 +1,17 @@
 import {
   Form,
-  Link,
   Links,
   LiveReload,
-  Meta, NavLink,
+  Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData, useNavigation
+  useLoaderData,
+  useNavigation
 } from "@remix-run/react";
 
-import { LinksFunction, redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, LinksFunction, redirect } from "@remix-run/node";
 
 import appStylesHref from "./app.css";
 import { createEmptyContact, getContacts } from "~/data";
