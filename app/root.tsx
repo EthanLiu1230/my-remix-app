@@ -15,6 +15,7 @@ import { json, LinksFunction, LoaderFunctionArgs, redirect } from "@remix-run/no
 
 import appStylesHref from "./app.css";
 import { createEmptyContact, getContacts } from "~/data";
+import { useEffect } from "react";
 
 /**
  * Every route can export a links function. They will be collected and rendered into the <Links /> component we rendered in app/root.tsx.
@@ -28,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   const contacts = await getContacts(q);
-  return json({ contacts });
+  return json({ contacts, q });
 };
 
 /**
@@ -43,8 +44,15 @@ export const action = async () => {
 
 export default function App() {
 
-  const { contacts } = useLoaderData<typeof loader>();
+  const { contacts, q } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const searchField = document.getElementById("q");
+    if (searchField instanceof HTMLInputElement) {
+      searchField.value = q || "";
+    }
+  }, [q]);
 
   return (
     <html lang="en">
@@ -59,7 +67,8 @@ export default function App() {
       <h1>Remix Contacts</h1>
       <div>
         <Form id="search-form" role="search">
-          <input id="q" aria-label="Search contacts" placeholder="Search" type="search" name="q" />
+          <input id="q" aria-label="Search contacts" placeholder="Search" type="search" name="q"
+                 defaultValue={q || ""} />
           <div id="search-spinner" aria-hidden hidden={true} />
         </Form>
         <Form method="post">
